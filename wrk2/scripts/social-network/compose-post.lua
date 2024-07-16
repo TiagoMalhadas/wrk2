@@ -48,6 +48,9 @@ request = function()
   local num_media = 0
   local media_ids = ''
   local media_types = ''
+  local now = socket.gettime()
+  -- convert request time to milliseconds
+  local composePostStartMs = math.floor(now * 1000)
 
   for i = 1, num_user_mentions, 1 do
     local user_mention_id
@@ -82,10 +85,10 @@ request = function()
   if num_media <= 0 then
     body   = "username=" .. username .. "&user_id=" .. user_id ..
         "&text=" .. text .. "&media_ids=" .. media_ids ..
-        "&media_types=" .. media_types .. "&post_type=0"
+        "&media_types=" .. media_types .. "&post_type=0"  .. "&composePostStartMs=" .. composePostStartMs
   else
     body   = "username=" .. username .. "&user_id=" .. user_id ..
-        "&text=" .. text .. "&post_type=0"
+        "&text=" .. text .. "&post_type=0"  .. "&composePostStartMs=" .. composePostStartMs
   end
 
   return wrk.format(method, path, headers, body)
